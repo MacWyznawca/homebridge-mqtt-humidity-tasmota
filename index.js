@@ -39,13 +39,13 @@ module.exports = function(homebridge) {
 
 function RelativeHumidityTasmotaAccessory(log, config) {
   this.log = log;
-  this.name = config["name"];
-    this.manufacturer = config['manufacturer'];
- 	this.model = config['model'];
-	this.serialNumberMAC = config['serialNumberMAC'];
+	this.name = config["name"] || "Sonoff";
+  	this.manufacturer = config['manufacturer'] || "ITEAD";
+	this.model = config['model'] || "Sonoff";
+	this.serialNumberMAC = config['serialNumberMAC'] || "";
 
-  this.url = config['url'];
-  this.topic = config['topic'];
+  	this.url = config['url'];
+  	this.topic = config['topic'];
   	if (config["activityTopic"] !== undefined) {
 		this.activityTopic = config["activityTopic"];
 	  	this.activityParameter = config["activityParameter"];
