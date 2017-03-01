@@ -1,6 +1,6 @@
 {
   "name": "homebridge-mqtt-humidity-tasmota",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Plugin to HomeBridge optimized for work with Itead Sonoff and Electrodragon Relay Board hardware and firmware Sonoff-Tasmota via MQTT. It acts as an Relative Humidity (and temperature) for DHT22, DHT11, AM2301, AM2302 sensors.",
   "main": "index.js",
   "scripts": {

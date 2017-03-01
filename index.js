@@ -100,10 +100,17 @@ function RelativeHumidityTasmotaAccessory(log, config) {
   this.client.on('message', function (topic, message) {
     if (topic == that.topic) {
 		data = JSON.parse(message);
-		if (data === null) {return null}
-		if (data.hasOwnProperty("DHT")) { 
+		hat.humidity = 0.0;
+		if (data === null) {
+			that.humidity = parseFloat(message);
+		} else if (data.hasOwnProperty("DHT")) {
 			that.humidity = parseFloat(data.DHT.Humidity);
-			that.temperature = parseFloat(parseFloat(data.DHT.Temperature));
+		} else if (data.hasOwnProperty("DHT22")) {
+			that.humidity = parseFloat(data.DHT22.Humidity);
+		} else if (data.hasOwnProperty("AM2301")) {
+			that.humidity = parseFloat(data.AM2301.Humidity);
+		} else if (data.hasOwnProperty("DHT11")) {
+			that.humidity = parseFloat(data.DHT11.Humidity);
 		} else {return null}
 		that.service.setCharacteristic(Characteristic.CurrentTemperature, that.temperature);
 		that.service.setCharacteristic(Characteristic.CurrentRelativeHumidity, that.humidity);
