@@ -1,6 +1,6 @@
 # homebridge-mqtt-humidity-tasmota
 
-Plugin to HomeBridge optimized for work with Itead Sonoff and Electrodragon Relay Board hardware and firmware [Sonoff-Tasmota](https://github.com/arendst/Sonoff-Tasmota) via MQTT. It acts as an Relative Humidity (and temperature) for DHT22, DHT11, AM2301, AM2302 sensors.
+Plugin to HomeBridge optimized for work with Itead Sonoff and Electrodragon Relay Board hardware and firmware [Sonoff-Tasmota](https://github.com/arendst/Sonoff-Tasmota) via MQTT. It acts as an Relative Humidity (and temperature) accessory for DHT22, DHT11, AM2301, AM2302 and other sensors.
 
 Like this? Please buy me a beer (or coffee) ;-) <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=CK56Q7SFHEHSW"><img src="http://macwyznawca.pl/donate-paypal2.png" alt="Donate a coder" data-canonical-src="http://macwyznawca.pl/donate-paypal.svg" style="max-width:100%;"></a>
 
@@ -23,31 +23,33 @@ Sample HomeBridge Configuration (complete)
     },
     
     "description": "This is an example configuration file. You can use this as a template for creating your own configuration file.",
-
+	
     "platforms": [],
 	
 	"accessories": [
 		{
 			"accessory": "mqtt-humidity-tasmota",
-
+			
 			"name": "NAME OF THIS ACCESSORY",
 	
 			"url": "mqtt://MQTT-ADDRESS",
 			"username": "MQTT USER NAME",
 			"password": "MQTT PASSWORD",
-
+			
 			"topic": "tele/sonoff/SENSOR",
-
+			
 			"activityTopic": "tele/sonoff/LWT",
 			"activityParameter": "Online",
-
+			
 			"startCmd": "cmnd/sonoff/TelePeriod",
 			"startParameter": "120",
+			
+			"sensorPropertyName": "BME280_2",
 
 			"manufacturer": "ITEAD",
 			"model": "Sonoff TH",
 			"serialNumberMAC": "MAC OR SERIAL NUMBER"
-
+			
 		}
 	]
 }
@@ -65,21 +67,20 @@ Sample HomeBridge Configuration (minimal)
     },
     
     "description": "This is an example minimal configuration file. You can use this as a template for creating your own configuration file.",
-
+	
     "platforms": [],
 	
 	"accessories": [
 		{
 			"accessory": "mqtt-humidity-tasmota",
-
+			
 			"name": "NAME OF THIS ACCESSORY",
 	
 			"url": "mqtt://MQTT-ADDRESS",
 			"username": "MQTT USER NAME",
 			"password": "MQTT PASSWORD",
-
+			
 			"topic": "tele/sonoff/SENSOR"
-
 		}
 	]
 }
@@ -98,3 +99,4 @@ Sample HomeBridge Configuration (minimal)
 
 **"startParameter": "60"** - payload for **startCmd**.
 
+**"sensorPropertyName": "BME280-2"** - custom Property name for sensor (see accessory WWW console for tips:  {"Time":"2017-03-01T08:47:19", "**DHT22-2**":{"Temperature":4.6, "Humidity":71.7}})

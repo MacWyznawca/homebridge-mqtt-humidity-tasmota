@@ -19,6 +19,8 @@
 		"startCmd": "cmnd/sonoff/TelePeriod",
 		"startParameter": "120",
 
+		"sensorPropertyName": "BME280_2",
+
 		"manufacturer": "ITEAD",
 		"model": "Sonoff TH",
 		"serialNumberMAC": "MAC OR SERIAL NUMBER"
@@ -43,7 +45,9 @@ function RelativeHumidityTasmotaAccessory(log, config) {
   	this.manufacturer = config['manufacturer'] || "ITEAD";
 	this.model = config['model'] || "Sonoff";
 	this.serialNumberMAC = config['serialNumberMAC'] || "";
-
+	
+	this.sensorPropertyName = config["sensorPropertyName"] || "Sensor";
+	
   	this.url = config['url'];
   	this.topic = config['topic'];
   	if (config["activityTopic"] !== undefined) {
@@ -100,17 +104,31 @@ function RelativeHumidityTasmotaAccessory(log, config) {
   this.client.on('message', function (topic, message) {
     if (topic == that.topic) {
 		data = JSON.parse(message);
-		hat.humidity = 0.0;
+		that.humidity = 0.0;
+		that.temperature = -49.0;
 		if (data === null) {
-			that.humidity = parseFloat(message);
+			that.temperature = parseFloat(message);
 		} else if (data.hasOwnProperty("DHT")) {
 			that.humidity = parseFloat(data.DHT.Humidity);
+			that.temperature = parseFloat(data.DHT.Temperature);
 		} else if (data.hasOwnProperty("DHT22")) {
 			that.humidity = parseFloat(data.DHT22.Humidity);
+			that.temperature = parseFloat(data.DHT22.Temperature);
 		} else if (data.hasOwnProperty("AM2301")) {
 			that.humidity = parseFloat(data.AM2301.Humidity);
+			that.temperature = parseFloat(data.AM2301.Temperature);
 		} else if (data.hasOwnProperty("DHT11")) {
 			that.humidity = parseFloat(data.DHT11.Humidity);
+			that.temperature = parseFloat(data.DHT11.Temperature);
+		} else if (data.hasOwnProperty("HTU21")) {
+			that.humidity = parseFloat(data.HTU21.Humidity);
+			that.temperature = parseFloat(data.HTU21.Temperature);
+		} else if (data.hasOwnProperty("BME280")) {
+			that.humidity = parseFloat(data.BMP280.Humidity);
+			that.temperature = parseFloat(data.BMP280.Temperature);
+		} else if (data.hasOwnProperty(that.sensorPropertyName)) {
+				that.humidity = parseFloat(data[that.sensorPropertyName].Humidity);
+				that.temperature = parseFloat(data[that.sensorPropertyName].Temperature);
 		} else {return null}
 		that.service.setCharacteristic(Characteristic.CurrentTemperature, that.temperature);
 		that.service.setCharacteristic(Characteristic.CurrentRelativeHumidity, that.humidity);

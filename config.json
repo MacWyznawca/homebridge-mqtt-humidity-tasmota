@@ -28,6 +28,8 @@
 
 			"startCmd": "cmnd/sonoff/TelePeriod",
 			"startParameter": "120",
+			
+			"sensorPropertyName": "BME280_2",
 
 			"manufacturer": "ITEAD",
 			"model": "Sonoff TH",
