@@ -1,34 +1,5 @@
 // Sonoff-Tasmota Relative Humidity (and temperature) Sensor Accessory plugin for HomeBridge
-//
-// Remember to add accessory to config.json. Example:
-/* 	"accessories": [
-	{
-		"accessory": "mqtt-humidity-tasmota",
-
-		"name": "NAME OF THIS ACCESSORY",
-	
-		"url": "mqtt://MQTT-ADDRESS",
-		"username": "MQTT USER NAME",
-		"password": "MQTT PASSWORD",
-
-		"topic": "tele/sonoff/SENSOR",
-
-		"activityTopic": "tele/sonoff/LWT",
-		"activityParameter": "Online",
-
-		"startCmd": "cmnd/sonoff/TelePeriod",
-		"startParameter": "120",
-
-		"sensorPropertyName": "BME280_2",
-
-		"manufacturer": "ITEAD",
-		"model": "Sonoff TH",
-		"serialNumberMAC": "MAC OR SERIAL NUMBER"
-
-	}]
-*/
-// When you attempt to add a device, it will ask for a "PIN code".
-// The default code for all HomeBridge accessories is 031-45-154.
+// Jaromir Kopp @MacWyznawca
 
 var Service, Characteristic;
 var mqtt    = require('mqtt');
@@ -103,7 +74,12 @@ function RelativeHumidityTasmotaAccessory(log, config) {
 
   this.client.on('message', function (topic, message) {
     if (topic == that.topic) {
-		data = JSON.parse(message);
+		try {
+			data = JSON.parse(message);
+		}
+		catch (e) {
+		  that.log("JSON problem");
+		}
 		that.humidity = 0.0;
 		that.temperature = -49.0;
 		if (data === null) {
@@ -124,8 +100,8 @@ function RelativeHumidityTasmotaAccessory(log, config) {
 			that.humidity = parseFloat(data.HTU21.Humidity);
 			that.temperature = parseFloat(data.HTU21.Temperature);
 		} else if (data.hasOwnProperty("BME280")) {
-			that.humidity = parseFloat(data.BMP280.Humidity);
-			that.temperature = parseFloat(data.BMP280.Temperature);
+			that.humidity = parseFloat(data.BME280.Humidity);
+			that.temperature = parseFloat(data.BME280.Temperature);
 		} else if (data.hasOwnProperty(that.sensorPropertyName)) {
 				that.humidity = parseFloat(data[that.sensorPropertyName].Humidity);
 				that.temperature = parseFloat(data[that.sensorPropertyName].Temperature);
